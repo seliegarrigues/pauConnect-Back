@@ -1,9 +1,11 @@
-import article from "../Model/articleModel";
+//debut code PAUCONNECT-B/Controlleur/articleControlleur.js
+
+import Article from "../Model/articleModel.js";
 
 const createArticle = async (req, res) => {
   const { category, title, summary, image, content, author } = req.body;
   try {
-    const newArticle = await article.create({
+    const newArticle = await Article.create({
       category,
       title,
       summary,
@@ -13,13 +15,14 @@ const createArticle = async (req, res) => {
     });
     res.json(newArticle);
   } catch (err) {
+    console.error("erreur lors de la création de l'article : ",err)
     res.status(500).send("erreur de serveur");
   }
 };
 
 const getArticles = async (req, res) => {
   try {
-    const articles = await article.find();
+    const articles = await Article.find();
     res.json(articles);
   } catch (err) {
     console.error(err.message);
@@ -27,3 +30,5 @@ const getArticles = async (req, res) => {
   }
 };
 export { getArticles, createArticle };
+
+//fin code PAUCONNECT-B/Controlleur/articleControlleur.js

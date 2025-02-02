@@ -1,4 +1,4 @@
-//Model/ userModel.js
+//debut code PAUCONNECT-B/Model/ userModel.js
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
@@ -27,3 +27,5 @@ const userSchema = new Schema({
 const User = mongoose.model("User", userSchema);
 
 export default User;
+
+//fin code PAUCONNECT-B/Model/ userModel.js

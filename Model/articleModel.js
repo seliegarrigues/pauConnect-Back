@@ -1,4 +1,4 @@
-//MOdel/articleModel.js
+// debut code PAUCONNECT-B/Model/articleModel.js
 
 import mongoose from "mongoose";
 
@@ -32,7 +32,7 @@ const articleSchema = new Schema({
   },
   likes: {
     Users: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    counter: { type: Number },
+    counter: { type: Number, default: 0 },
   },
   savedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
   comments: [
@@ -47,3 +47,4 @@ const articleSchema = new Schema({
 const Article = mongoose.model("Article", articleSchema);
 
 export default Article;
+// fin code PAUCONNECT-B/Model/articleModel.js

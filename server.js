@@ -1,22 +1,31 @@
-// configuration de base server.js
+// debut code PAUCONNECT-B/server.js
 
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
-import connectDB from "./config/db";
+import connectDB from "./config/db.js";
+import articleRoute from "./Route/articleRoute.js";
+import userRoute from "./Route/userRoute.js";
+
 dotenv.config();
 
 const app = express();
-connectDB();
+
 app.use(express.json());
 
-// routes
-
-app.use("/api/articles", require("./routes/articleRoute"));
-app.use("/api/users", require("./routes/userRoute"));
+// Routes
+app.use("/api/articles", articleRoute);
+app.use("/api/users", userRoute);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () =>
-  console.info(`le serveur tourne sur le port :  ${PORT}`)
-);
+const startServer = async () => {
+  // On attend que la connexion à MongoDB soit établie
+  await connectDB();
+  app.listen(PORT, () => {
+    console.info(`Le serveur tourne sur le port : ${PORT}`);
+  });
+};
+
+startServer();
+
+// fin code PAUCONNECT-B/server.js

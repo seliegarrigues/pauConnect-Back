@@ -1,39 +1,39 @@
-import User from "../Model/userModel";
-import Profile from "../Model/userProfileModel";
+// debut code PAUCONNECT-B/Controlleur/userControlleur.js
+
+import User from "../Model/userModel.js";
+import Profile from "../Model/userProfileModel.js";
 
 import jwtLibrary from "jsonwebtoken";
 
+import bcrypt from "bcryptjs";
+// ...
 const register = async (req, res) => {
   const { email, name, password } = req.body;
   try {
-    console.log("vérifie si lutilisateur existe deja...");
     let user = await User.findOne({ email });
     if (user) {
-      console.log("utilisateur existe deja...");
       return res.status(400).json({ message: "Cet utilisateur existe déjà" });
     }
-    console.log("Création de l'utilisateur...");
+    // Hachage du mot de passe
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
     user = await User.create({
       email,
       name,
-      password, // HashedPassword
+      password: hashedPassword,
     });
-    const payload = {
-      user: { id: user._id },
-    };
-    console.log("génération du token...");
+    const payload = { user: { id: user._id } };
     const token = jwtLibrary.sign(payload, "votre_jwt_secret", {
       expiresIn: 360000,
     });
-    console.log("utilisateur enregistré avec succès");
     res.json({ token });
   } catch (err) {
-    console.error("Erreur dans lenregistrment", err.message);
+    console.error("Erreur dans l'enregistrement", err.message);
     res.status(500).send("Server Error");
   }
 };
 
-const becomeAuthor = async (req, res) => {
+const becomeAuthors = async (req, res) => {
   const { userId } = req.body;
   try {
     let user = await User.findById(userId);
@@ -62,4 +62,5 @@ const becomeAuthor = async (req, res) => {
 
 // export
 
-export { register, becomeAuthor };
+export { register, becomeAuthors };
+// fin code PAUCONNECT-B/Controlleur/userControlleur.js

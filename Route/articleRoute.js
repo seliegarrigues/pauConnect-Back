@@ -1,6 +1,11 @@
+// debut code PAUCONNECT-B/Route/articleRoute.js
+
 import express from "express";
-const router = express.router();
-import { getArticles, createArticle } from "../Controlleur/articleControlleur";
+const router = express.Router();
+import {
+  getArticles,
+  createArticle,
+} from "../Controlleur/articleControlleur.js";
 
 // Get all articles
 
@@ -12,3 +17,5 @@ router.post("/", createArticle);
 router.delete("/:id", auth, deleteArticle);
  */
 export default router;
+
+// fin code PAUCONNECT-B/Route/articleRoute.js
