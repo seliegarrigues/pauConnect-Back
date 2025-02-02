@@ -2,7 +2,7 @@
 
 import User from "../Model/userModel.js";
 import Profile from "../Model/userProfileModel.js";
-
+import DeletedUser from "../Model/deletedUserModel.js";
 import jwtLibrary from "jsonwebtoken";
 
 import bcrypt from "bcryptjs";
@@ -59,8 +59,47 @@ const becomeAuthors = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(id, updates, { new: true });
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+    res.json(user);
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour de l'utilisateur :", err);
+    res.status(500).send("Erreur de serveur");
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+    // Créer un enregistrement dans DeletedUser
+    const deletedUserData = {
+      originalId: user._id,
+      email: user.email,
+      name: user.name,
+      password: user.password,
+      role: user.role,
+    };
+    await DeletedUser.create(deletedUserData);
+    // Supprimer l'utilisateur de la collection principale
+    await User.findByIdAndDelete(id);
+    res.json({ message: "Utilisateur archivé et supprimé avec succès" });
+  } catch (err) {
+    console.error("Erreur lors de la suppression de l'utilisateur :", err);
+    res.status(500).send("Erreur de serveur");
+  }
+};
 
 // export
 
-export { register, becomeAuthors };
+export { register, becomeAuthors, updateUser, deleteUser };
 // fin code PAUCONNECT-B/Controlleur/userControlleur.js
