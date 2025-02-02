@@ -15,7 +15,7 @@ const createArticle = async (req, res) => {
     });
     res.json(newArticle);
   } catch (err) {
-    console.error("erreur lors de la création de l'article : ",err)
+    console.error("erreur lors de la création de l'article : ", err);
     res.status(500).send("erreur de serveur");
   }
 };
@@ -30,34 +30,33 @@ const getArticles = async (req, res) => {
   }
 };
 
-const updateArticle = async (req,res)=>{
+const updateArticle = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateArticle = await Article.findByIdAndUpdate(
-      id,
-      req.body,
-      { new: true, runValidators:true }
-    );
+    const updateArticle = await Article.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
     if (!updateArticle) {
-      return res.status(400).json({ message : "Article non trouvé"});
+      return res.status(400).json({ message: "Article non trouvé" });
     }
     res.json(updateArticle);
   } catch (err) {
-    console.error ( "erreur lors de la mise à jour de l'article:",err);
-    res.status(500).send("erreur de serveur update")
+    console.error("erreur lors de la mise à jour de l'article:", err);
+    res.status(500).send("erreur de serveur update");
   }
 };
 
-const deleteArticle = async (req,res)=> {
+const deleteArticle = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedArticle = await.Article.findAndDelete(id);
+    const deletedArticle = await Article.findByIdAndDelete(id);
     if (!deletedArticle) {
-      return res.status(404).json({message : "Article non trouvé"});
+      return res.status(404).json({ message: "Article non trouvé" });
     }
-    res.json({message : "Article supprimé avec succès"});
+    res.json({ message: "Article supprimé avec succès" });
   } catch (err) {
-    console.error ("erreur lors de la suppression de l'article:",err);
+    console.error("erreur lors de la suppression de l'article:", err);
     res.status(500).send("erreur de serveur");
   }
 };
